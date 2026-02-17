@@ -81,15 +81,12 @@
       <span *ngIf="log.status === 'on-leave'" style="color:#ABABAB;font-size:12px;font-weight:bold">{{ log.leaveType
         }}</span> -->
     </ion-col>
-    <ion-col size="2" *ngIf="log.status !== 'weekend' && log.status !== 'on-leave'">{{ formatHours(log.effective_hours)
-      }}</ion-col>
-    <ion-col size="2" *ngIf="log.status !== 'weekend' && log.status !== 'on-leave'">{{ formatHours(log.gross_hours)
-    <ion-col size="2" *ngIf="log.status !== 'weekend' && log.status !== 'on-leave'">{{ log.effective_hours | timeFormat
-      }}</ion-col>
-    <ion-col size="2" *ngIf="log.status !== 'weekend' && log.status !== 'on-leave'">{{ log.gross_hours | timeFormat
-      }}</ion-col>
-    <ion-col size="2" *ngIf="log.status !== 'weekend' && log.status !== 'on-leave'">{{ getArrivalStatus(log)
-      }}</ion-col>
+    <ion-col size="2" *ngIf="log.status !== 'weekend' && log.status !== 'on-leave'">
+      {{ log.effective_hours | timeFormat }}
+    </ion-col>
+    <ion-col size="2" *ngIf="log.status !== 'weekend' && log.status !== 'on-leave'">
+      {{ log.gross_hours | timeFormat }}
+    </ion-col>
     <ion-col size="2" *ngIf="log.status !== 'weekend' && log.status !== 'on-leave'">
       <div style="display: flex; align-items: center;">
         <ion-icon *ngIf="getLateDuration(log)" name="notifications-outline"

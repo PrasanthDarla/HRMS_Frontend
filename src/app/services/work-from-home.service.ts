@@ -41,6 +41,10 @@ export class WorkFromHomeService {
      ================================================== */
   wfh(payload: {
     date: string;
+    to_date?: string;
+    total_days?: number;
+    from_session?: string;
+    to_session?: string;
     work_mode: 'WFH' | 'WFO';
     reason: string;
   }): Observable<any> {

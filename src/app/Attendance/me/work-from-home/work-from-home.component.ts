@@ -152,9 +152,9 @@ export class WorkFromHomeComponent implements OnInit {
   }
 
   calculateDays() {
+    const fromTime = new Date(this.fromDate.getFullYear(), this.fromDate.getMonth(), this.fromDate.getDate()).getTime();
+    const toTime = new Date(this.toDate.getFullYear(), this.toDate.getMonth(), this.toDate.getDate()).getTime();
     const oneDay = 1000 * 60 * 60 * 24;
-    const toTime = this.toDate.getTime();
-    const fromTime = this.fromDate.getTime();
 
     if (toTime < fromTime) {
       this.totalDays = 0;
@@ -163,9 +163,7 @@ export class WorkFromHomeComponent implements OnInit {
     }
 
     this.validationError = '';
-    let diff = Math.floor((toTime - fromTime) / oneDay) + 1;
-
-    if (diff <= 0) diff = 1;
+    let diff = Math.round((toTime - fromTime) / oneDay) + 1;
 
     if (this.requestType === 'full') {
       this.totalDays = diff;
@@ -174,10 +172,16 @@ export class WorkFromHomeComponent implements OnInit {
 
     let total = diff;
 
-    if (this.fromSession !== 'full') total -= 0.5;
-    if (this.toSession !== 'full') total -= 0.5;
+    // In custom mode, fromSession affects the first day and toSession affects the last day
+    if (this.fromSession === 'second') {
+      total -= 0.5;
+    }
 
-    this.totalDays = total;
+    if (this.toSession === 'first') {
+      total -= 0.5;
+    }
+
+    this.totalDays = Math.max(0, total);
   }
 
   /* ================= SUBMIT ================= */
@@ -186,8 +190,13 @@ export class WorkFromHomeComponent implements OnInit {
 
     const payload: any = {
       date: this.formatDate(this.fromDate),
+      to_date: this.formatDate(this.toDate),
+      total_days: this.totalDays,
+      from_session: this.fromSession,
+      to_session: this.toSession,
       work_mode: 'WFH',
       reason: this.note,
+      notify_employee: this.notifyEmployee,
     };
 
     this.wfhService.wfh(payload).subscribe({
